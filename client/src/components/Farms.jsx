@@ -1,13 +1,15 @@
 // src/components/Farms.jsx
 import React, { useState, useEffect } from 'react';
 import { farmAPI } from '../services/api';
-import { Plus, Edit, Trash2, MapPin } from 'lucide-react';
+import { Plus, Edit, Trash2, MapPin, AlertCircle, Loader } from 'lucide-react';
 
 const Farms = () => {
   const [farms, setFarms] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingFarm, setEditingFarm] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [debugInfo, setDebugInfo] = useState('');
 
   const [formData, setFormData] = useState({
     farmName: '',
@@ -22,24 +24,51 @@ const Farms = () => {
 
   const fetchFarms = async () => {
     try {
+      setError('');
+      console.log('Fetching farms...');
       const response = await farmAPI.getFarms();
+      console.log('Farms response:', response);
       setFarms(response.data);
     } catch (error) {
       console.error('Error fetching farms:', error);
+      const errorMsg = error.response?.data?.message || error.message || 'Failed to load farms';
+      setError(errorMsg);
+      setDebugInfo(`Status: ${error.response?.status}, URL: ${error.config?.url}`);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
+    setDebugInfo('');
 
     try {
+      console.log('Submitting farm data:', formData);
+      
+      // Prepare data for backend
+      const submitData = {
+        farmName: formData.farmName,
+        location: formData.location,
+        cropType: formData.cropType || undefined,
+        size: formData.size.value ? {
+          value: parseFloat(formData.size.value),
+          unit: formData.size.unit
+        } : undefined
+      };
+
+      console.log('Sending to backend:', submitData);
+
+      let response;
       if (editingFarm) {
-        await farmAPI.updateFarm(editingFarm._id, formData);
+        response = await farmAPI.updateFarm(editingFarm._id, submitData);
+        console.log('Update response:', response);
       } else {
-        await farmAPI.addFarm(formData);
+        response = await farmAPI.addFarm(submitData);
+        console.log('Add response:', response);
       }
       
+      // Reset form and close modal
       setShowForm(false);
       setEditingFarm(null);
       setFormData({
@@ -48,15 +77,36 @@ const Farms = () => {
         cropType: '',
         size: { value: '', unit: 'acres' }
       });
-      fetchFarms();
+      
+      // Refresh farms list
+      await fetchFarms();
+      
     } catch (error) {
       console.error('Error saving farm:', error);
+      console.log('Full error object:', error);
+      
+      const errorMsg = error.response?.data?.message || 
+                      error.response?.data?.error || 
+                      error.message || 
+                      'Failed to save farm';
+      
+      setError(errorMsg);
+      
+      // Debug information
+      setDebugInfo(`
+        Status: ${error.response?.status}
+        URL: ${error.config?.url}
+        Method: ${error.config?.method}
+        Has Token: ${!!localStorage.getItem('token')}
+      `);
+      
     } finally {
       setLoading(false);
     }
   };
 
   const handleEdit = (farm) => {
+    console.log('Editing farm:', farm);
     setEditingFarm(farm);
     setFormData({
       farmName: farm.farmName,
@@ -71,9 +121,10 @@ const Farms = () => {
     if (window.confirm('Are you sure you want to delete this farm?')) {
       try {
         await farmAPI.deleteFarm(farmId);
-        fetchFarms();
+        await fetchFarms();
       } catch (error) {
         console.error('Error deleting farm:', error);
+        setError(error.response?.data?.message || 'Failed to delete farm');
       }
     }
   };
@@ -90,12 +141,37 @@ const Farms = () => {
         </div>
         <button 
           className="bg-gradient-to-r from-primary-green to-primary-light text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center space-x-2"
-          onClick={() => setShowForm(true)}
+          onClick={() => {
+            setShowForm(true);
+            setEditingFarm(null);
+            setFormData({
+              farmName: '',
+              location: '',
+              cropType: '',
+              size: { value: '', unit: 'acres' }
+            });
+          }}
         >
           <Plus size={20} />
           <span>Add Farm</span>
         </button>
       </div>
+
+      {/* Error Display */}
+      {error && (
+        <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="flex items-center gap-3 mb-2">
+            <AlertCircle className="text-red-500" size={20} />
+            <span className="text-red-700 font-medium">{error}</span>
+          </div>
+          {debugInfo && (
+            <div className="mt-2 p-2 bg-red-100 rounded text-xs font-mono text-red-800">
+              <strong>Debug Info:</strong>
+              <pre>{debugInfo}</pre>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Farm Form Modal */}
       {showForm && (
@@ -108,7 +184,7 @@ const Farms = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-primary-green mb-2">
-                  Farm Name
+                  Farm Name *
                 </label>
                 <input
                   type="text"
@@ -122,7 +198,7 @@ const Farms = () => {
 
               <div>
                 <label className="block text-sm font-medium text-primary-green mb-2">
-                  Location
+                  Location *
                 </label>
                 <input
                   type="text"
@@ -143,7 +219,7 @@ const Farms = () => {
                   onChange={(e) => setFormData({...formData, cropType: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-all duration-200"
                 >
-                  <option value="">Select Crop</option>
+                  <option value="">Select Crop (Optional)</option>
                   {cropTypes.map(crop => (
                     <option key={crop} value={crop}>{crop}</option>
                   ))}
@@ -157,6 +233,7 @@ const Farms = () => {
                 <div className="flex space-x-2">
                   <input
                     type="number"
+                    step="0.1"
                     value={formData.size.value}
                     onChange={(e) => setFormData({
                       ...formData, 
@@ -186,15 +263,18 @@ const Farms = () => {
                   onClick={() => {
                     setShowForm(false);
                     setEditingFarm(null);
+                    setError('');
                   }}
+                  disabled={loading}
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit" 
-                  className="flex-1 bg-gradient-to-r from-primary-green to-primary-light text-white py-2 px-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50"
+                  className="flex-1 bg-gradient-to-r from-primary-green to-primary-light text-white py-2 px-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2"
                   disabled={loading}
                 >
+                  {loading && <Loader size={16} className="animate-spin" />}
                   {loading ? 'Saving...' : (editingFarm ? 'Update' : 'Add')} Farm
                 </button>
               </div>
@@ -233,9 +313,11 @@ const Farms = () => {
                       {farm.cropType}
                     </span>
                   )}
-                  <div className="text-natural-brown font-medium">
-                    {farm.size?.value} {farm.size?.unit}
-                  </div>
+                  {farm.size?.value && (
+                    <div className="text-natural-brown font-medium">
+                      {farm.size.value} {farm.size.unit}
+                    </div>
+                  )}
                 </div>
                 <div className="flex space-x-2 mt-4 sm:mt-0">
                   <button 

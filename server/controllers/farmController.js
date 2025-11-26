@@ -1,68 +1,102 @@
-import Farm from "../models/Farm.js";
+// controllers/farmController.js
+import Farm from '../models/Farm.js';
 
-// ➕ Add new farm
 export const addFarm = async (req, res) => {
   try {
-    const { farmName, location, cropType, size } = req.body;
+    console.log('Received farm data:', req.body);
+    console.log('User ID from token:', req.user.userId);
 
-    const newFarm = new Farm({
-      userId: req.user.id,
+    const { farmName, location, cropType, size } = req.body;
+    
+    // Validate required fields
+    if (!farmName || !location) {
+      return res.status(400).json({ 
+        message: 'Farm name and location are required' 
+      });
+    }
+
+    // Create new farm
+    const farm = new Farm({
+      userId: req.user.userId,
       farmName,
       location,
-      cropType,
-      size
+      cropType: cropType || '',
+      size: size || { value: 0, unit: 'acres' },
+      status: 'active'
     });
 
-    await newFarm.save();
-    res.json({ message: "Farm added successfully 🌾", farm: newFarm });
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const savedFarm = await farm.save();
+    console.log('Farm saved successfully:', savedFarm);
+    
+    res.status(201).json({
+      message: 'Farm added successfully',
+      farm: savedFarm
+    });
+    
+  } catch (error) {
+    console.error('Error adding farm:', error);
+    res.status(500).json({ 
+      message: 'Error adding farm',
+      error: error.message,
+      stack: error.stack // Include stack trace for debugging
+    });
   }
 };
 
-// 📌 Get all farms for user
 export const getFarms = async (req, res) => {
   try {
-    const farms = await Farm.find({ userId: req.user.id });
+    console.log('Fetching farms for user:', req.user.userId);
+    const farms = await Farm.find({ userId: req.user.userId });
+    console.log('Found farms:', farms);
     res.json(farms);
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  } catch (error) {
+    console.error('Error fetching farms:', error);
+    res.status(500).json({ 
+      message: 'Error fetching farms',
+      error: error.message 
+    });
   }
 };
 
-// ✏️ Update farm
 export const updateFarm = async (req, res) => {
   try {
     const farm = await Farm.findOneAndUpdate(
-      { _id: req.params.id, userId: req.user.id },
+      { _id: req.params.id, userId: req.user.userId },
       req.body,
-      { new: true }
+      { new: true, runValidators: true }
     );
-
-    if (!farm) return res.status(404).json({ message: "Farm not found ❌" });
-
-    res.json({ message: "Farm updated successfully 🌿", farm });
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    
+    if (!farm) {
+      return res.status(404).json({ message: 'Farm not found' });
+    }
+    
+    res.json({ message: 'Farm updated successfully', farm });
+  } catch (error) {
+    console.error('Error updating farm:', error);
+    res.status(500).json({ 
+      message: 'Error updating farm',
+      error: error.message 
+    });
   }
 };
 
-// ❌ Delete farm
 export const deleteFarm = async (req, res) => {
   try {
-    const result = await Farm.findOneAndDelete({
-      _id: req.params.id,
-      userId: req.user.id
+    const farm = await Farm.findOneAndDelete({ 
+      _id: req.params.id, 
+      userId: req.user.userId 
     });
-
-    if (!result) return res.status(404).json({ message: "Farm not found ❌" });
-
-    res.json({ message: "Farm deleted successfully 🗑️" });
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    
+    if (!farm) {
+      return res.status(404).json({ message: 'Farm not found' });
+    }
+    
+    res.json({ message: 'Farm deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting farm:', error);
+    res.status(500).json({ 
+      message: 'Error deleting farm',
+      error: error.message 
+    });
   }
 };

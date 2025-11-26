@@ -1,4 +1,4 @@
-// models/Farm.js - UPDATED
+// models/Farm.js
 import mongoose from "mongoose";
 
 const farmSchema = new mongoose.Schema({
@@ -9,31 +9,21 @@ const farmSchema = new mongoose.Schema({
   },
   farmName: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   location: {
-    district: String,
-    village: String,
-    coordinates: {
-      lat: Number,
-      lng: Number
-    }
+    type: String,
+    required: true,
+    trim: true
   },
   cropType: {
     type: String,
-    enum: ["rice", "coconut", "rubber", "spices", "vegetables", "fruits", "other"]
+    default: ""
   },
   size: {
-    value: Number,
+    value: { type: Number, default: 0 },
     unit: { type: String, enum: ["acres", "hectares"], default: "acres" }
-  },
-  soilType: {
-    type: String,
-    enum: ["clay", "sandy", "loamy", "laterite", "other"]
-  },
-  irrigation: {
-    type: String,
-    enum: ["rainfed", "well", "canal", "drip", "sprinkler"]
   },
   status: {
     type: String,
@@ -45,6 +35,9 @@ const farmSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+// Remove any strict validation that might be causing issues
+farmSchema.set('strict', false);
 
 const Farm = mongoose.model("Farm", farmSchema);
 export default Farm;

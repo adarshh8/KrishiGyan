@@ -10,6 +10,7 @@ import CropRecommendations from './components/CropRecommendations';
 import Layout from './components/Layout';
 import PestManagement from './components/PestManagement';
 import MarketPrices from './components/MarketPrices';
+// Remove AnalyticsDashboard import since we're not using it yet
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
@@ -62,6 +63,9 @@ function App() {
                 </Layout>
               </ProtectedRoute>
             } />
+            
+            {/* Remove the AnalyticsDashboard route for now */}
+            {/* We'll add it back when we create the component properly */}
             
             {/* Catch all route - redirect to home */}
             <Route path="*" element={<Navigate to="/" />} />
