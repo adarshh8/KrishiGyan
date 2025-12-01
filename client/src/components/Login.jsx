@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { User, Lock, Eye, EyeOff } from 'lucide-react';
-
+import { User, Lock, Eye, EyeOff, Fullscreen } from 'lucide-react';
+import backgroundImage from '../assets/image1.png';
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -39,7 +39,13 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-natural-beige to-green-50 p-4">
+<div 
+      className="min-h-screen flex items-center justify-center 
+                 bg-cover bg-center bg-no-repeat 
+                 from-natural-beige to-green-50 p-4"
+      // 💡 Apply background-image using inline style and the imported variable
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-2xl p-8 border border-primary-green/10">
           {/* Logo */}

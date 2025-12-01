@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { User, Mail, Lock, MapPin, Phone, Eye, EyeOff } from 'lucide-react';
-
+import image from '../assets/image2.png';
 const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -63,7 +63,12 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-natural-beige to-green-50 p-4">
+    <div 
+      className="min-h-screen flex items-center justify-center 
+                 bg-cover bg-center bg-no-repeat p-4"
+      // Replace the old gradient with the inline style for the image
+      style={{ backgroundImage: `url(${image})` }}
+    >
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-2xl p-8 border border-primary-green/10">
           {/* Logo */}
