@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { User, Lock, Eye, EyeOff, Fullscreen } from 'lucide-react';
 import backgroundImage from '../assets/image1.png';
+import { useLanguage } from '../contexts/LanguageContext.jsx';
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -15,6 +16,7 @@ const Login = () => {
 
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,7 +61,7 @@ const Login = () => {
             </div>
             <h1 className="text-3xl font-bold text-primary-green mb-2">KRISHIGNAN</h1>
             <p className="text-natural-brown font-medium">FARMING WISDOM</p>
-            <p className="text-gray-600 mt-4">Sign in to your account</p>
+            <p className="text-gray-600 mt-4">{t('signInToYourAccount')}</p>
           </div>
 
           {error && (
@@ -78,7 +80,7 @@ const Login = () => {
                 <input
                   type="email"
                   name="email"
-                  placeholder="Enter your email"
+                  placeholder={t('emailPlaceholder')}
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -94,7 +96,7 @@ const Login = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  placeholder="Enter your password"
+                  placeholder={t('passwordPlaceholder')}
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -119,15 +121,15 @@ const Login = () => {
               disabled={loading}
               className="w-full bg-gradient-to-r from-primary-green to-primary-light text-white py-3 px-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:transform-none"
             >
-              {loading ? 'Signing In...' : 'Sign In'}
+              {loading ? t('signingIn') : t('signIn')}
             </button>
           </form>
 
           <div className="text-center mt-6 pt-6 border-t border-gray-200">
             <p className="text-gray-600">
-              Don't have an account?{' '}
+              {t('dontHaveAccount')}{' '}
               <Link to="/register" className="text-primary-green font-semibold hover:underline">
-                Sign up here
+                {t('signUpHere')}
               </Link>
             </p>
           </div>

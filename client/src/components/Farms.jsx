@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { farmAPI } from '../services/api';
 import { Plus, Edit, Trash2, MapPin, AlertCircle, Loader } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext.jsx';
 
 const Farms = () => {
   const [farms, setFarms] = useState([]);
@@ -10,6 +11,7 @@ const Farms = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [debugInfo, setDebugInfo] = useState('');
+  const { t } = useLanguage();
 
   const [formData, setFormData] = useState({
     farmName: '',
@@ -118,7 +120,7 @@ const Farms = () => {
   };
 
   const handleDelete = async (farmId) => {
-    if (window.confirm('Are you sure you want to delete this farm?')) {
+    if (window.confirm(t('deleteFarmConfirm'))) {
       try {
         await farmAPI.deleteFarm(farmId);
         await fetchFarms();
@@ -136,8 +138,8 @@ const Farms = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
         <div className="text-center sm:text-left mb-4 sm:mb-0">
-          <h1 className="text-3xl font-bold text-primary-green">My Farms</h1>
-          <p className="text-natural-brown mt-2">Manage your agricultural lands</p>
+          <h1 className="text-3xl font-bold text-primary-green">{t('farmsTitle')}</h1>
+          <p className="text-natural-brown mt-2">{t('farmsSubtitle')}</p>
         </div>
         <button 
           className="bg-gradient-to-r from-primary-green to-primary-light text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center space-x-2"
@@ -153,7 +155,7 @@ const Farms = () => {
           }}
         >
           <Plus size={20} />
-          <span>Add Farm</span>
+          <span>{t('addFarmButton')}</span>
         </button>
       </div>
 
@@ -178,13 +180,13 @@ const Farms = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
             <h2 className="text-2xl font-bold text-primary-green text-center mb-6">
-              {editingFarm ? 'Edit Farm' : 'Add New Farm'}
+              {editingFarm ? t('editFarmTitle') : t('addNewFarmTitle')}
             </h2>
             
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-primary-green mb-2">
-                  Farm Name *
+                  {t('farmNameLabel')} *
                 </label>
                 <input
                   type="text"
@@ -192,19 +194,19 @@ const Farms = () => {
                   onChange={(e) => setFormData({...formData, farmName: e.target.value})}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-all duration-200"
-                  placeholder="Enter farm name"
+                  placeholder={t('farmNamePlaceholder')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-primary-green mb-2">
-                  Location *
+                  {t('locationLabel')} *
                 </label>
                 <input
                   type="text"
                   value={formData.location}
                   onChange={(e) => setFormData({...formData, location: e.target.value})}
-                  placeholder="District, Village"
+                  placeholder={t('locationPlaceholder')}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-all duration-200"
                 />
@@ -212,14 +214,14 @@ const Farms = () => {
 
               <div>
                 <label className="block text-sm font-medium text-primary-green mb-2">
-                  Crop Type
+                  {t('cropTypeLabel')}
                 </label>
                 <select
                   value={formData.cropType}
                   onChange={(e) => setFormData({...formData, cropType: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-all duration-200"
                 >
-                  <option value="">Select Crop (Optional)</option>
+                  <option value="">{t('cropTypePlaceholder')}</option>
                   {cropTypes.map(crop => (
                     <option key={crop} value={crop}>{crop}</option>
                   ))}
@@ -228,7 +230,7 @@ const Farms = () => {
 
               <div>
                 <label className="block text-sm font-medium text-primary-green mb-2">
-                  Farm Size
+                  {t('farmSizeLabel')}
                 </label>
                 <div className="flex space-x-2">
                   <input
@@ -239,7 +241,7 @@ const Farms = () => {
                       ...formData, 
                       size: {...formData.size, value: e.target.value}
                     })}
-                    placeholder="Size"
+                    placeholder={t('sizePlaceholder')}
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-all duration-200"
                   />
                   <select
@@ -250,8 +252,8 @@ const Farms = () => {
                     })}
                     className="w-32 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-all duration-200"
                   >
-                    <option value="acres">Acres</option>
-                    <option value="hectares">Hectares</option>
+                    <option value="acres">{t('acres')}</option>
+                    <option value="hectares">{t('hectares')}</option>
                   </select>
                 </div>
               </div>
@@ -267,7 +269,7 @@ const Farms = () => {
                   }}
                   disabled={loading}
                 >
-                  Cancel
+                  {t('cancel')}
                 </button>
                 <button 
                   type="submit" 
@@ -275,7 +277,11 @@ const Farms = () => {
                   disabled={loading}
                 >
                   {loading && <Loader size={16} className="animate-spin" />}
-                  {loading ? 'Saving...' : (editingFarm ? 'Update' : 'Add')} Farm
+                  {loading
+                    ? t('saving')
+                    : editingFarm
+                      ? t('updateFarm')
+                      : t('addFarm')}
                 </button>
               </div>
             </form>
@@ -288,14 +294,14 @@ const Farms = () => {
         {farms.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-2xl shadow-lg">
             <MapPin size={64} className="mx-auto text-gray-400 mb-4" />
-            <h3 className="text-xl font-semibold text-primary-green mb-2">No farms added yet</h3>
-            <p className="text-natural-brown mb-6">Add your first farm to start getting agricultural advice</p>
+            <h3 className="text-xl font-semibold text-primary-green mb-2">{t('noFarmsAddedTitle')}</h3>
+            <p className="text-natural-brown mb-6">{t('noFarmsAddedText')}</p>
             <button 
               className="bg-gradient-to-r from-primary-green to-primary-light text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center space-x-2 mx-auto"
               onClick={() => setShowForm(true)}
             >
               <Plus size={20} />
-              <span>Add Your First Farm</span>
+              <span>{t('addFirstFarmButtonFarms')}</span>
             </button>
           </div>
         ) : (

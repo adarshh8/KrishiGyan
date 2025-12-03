@@ -1,6 +1,7 @@
 // src/components/MarketPrices.jsx
 import { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, Search, Filter, Calendar, MapPin, RefreshCw, AlertCircle, Store, DollarSign, Package, BarChart3, Download, Bell, Navigation } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext.jsx';
 
 const MarketPrices = () => {
   const [marketData, setMarketData] = useState([]);
@@ -10,6 +11,7 @@ const MarketPrices = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [lastUpdated, setLastUpdated] = useState('');
   const [priceTrends, setPriceTrends] = useState([]);
+  const { t } = useLanguage();
 
   // Kerala districts
   const districts = [
@@ -189,10 +191,10 @@ const MarketPrices = () => {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
             <div>
               <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
-                Kerala Agricultural Market Prices
+                {t('marketTitle')}
               </h1>
               <p className="text-gray-600">
-                Real-time commodity prices across Kerala markets
+                {t('marketSubtitle')}
               </p>
             </div>
             <div className="flex items-center gap-3 text-sm text-gray-600">
@@ -210,7 +212,7 @@ const MarketPrices = () => {
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-gray-800">{statistics.totalCommodities}</div>
-                  <div className="text-sm text-gray-600">Commodities</div>
+                  <div className="text-sm text-gray-600">{t('commoditiesLabel')}</div>
                 </div>
               </div>
             </div>
@@ -222,7 +224,7 @@ const MarketPrices = () => {
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-gray-800">{statistics.totalMarkets}</div>
-                  <div className="text-sm text-gray-600">Markets</div>
+                  <div className="text-sm text-gray-600">{t('marketsLabel')}</div>
                 </div>
               </div>
             </div>
@@ -234,7 +236,7 @@ const MarketPrices = () => {
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-gray-800">₹{statistics.averagePrice}</div>
-                  <div className="text-sm text-gray-600">Avg Price</div>
+                  <div className="text-sm text-gray-600">{t('avgPriceLabel')}</div>
                 </div>
               </div>
             </div>
@@ -246,7 +248,7 @@ const MarketPrices = () => {
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-gray-800">{statistics.risingPrices}</div>
-                  <div className="text-sm text-gray-600">Rising Prices</div>
+                  <div className="text-sm text-gray-600">{t('risingPricesLabel')}</div>
                 </div>
               </div>
             </div>
@@ -261,19 +263,19 @@ const MarketPrices = () => {
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
               <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                 <Filter size={20} />
-                Filter Prices
+                {t('filterPricesTitle')}
               </h2>
               
               {/* Search */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Search Commodities & Markets
+                  {t('searchLabel')}
                 </label>
                 <div className="relative">
                   <Search className="absolute left-3 top-3.5 text-gray-400" size={20} />
                   <input
                     type="text"
-                    placeholder="Search rice, coconut, market names..."
+                    placeholder={t('searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-10 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
@@ -284,14 +286,14 @@ const MarketPrices = () => {
               {/* Commodity Filter */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select Commodity
+                  {t('selectCommodityLabel')}
                 </label>
                 <select
                   value={selectedCommodity}
                   onChange={(e) => setSelectedCommodity(e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                 >
-                  <option value="">All Commodities</option>
+                  <option value="">{t('allCommoditiesOption')}</option>
                   {commodities.map(commodity => (
                     <option key={commodity} value={commodity}>{commodity}</option>
                   ))}
@@ -302,7 +304,7 @@ const MarketPrices = () => {
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   <MapPin size={16} className="inline mr-2" />
-                  Select District
+                  {t('selectDistrictLabel')}
                 </label>
                 <select
                   value={selectedDistrict}
@@ -323,7 +325,7 @@ const MarketPrices = () => {
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-amber-500 text-white rounded-xl font-medium hover:bg-amber-600 transition-colors disabled:opacity-50"
                 >
                   <RefreshCw size={20} className={loading ? 'animate-spin' : ''} />
-                  {loading ? 'Refreshing...' : 'Refresh Prices'}
+                  {loading ? t('refreshingButton') : t('refreshPricesButton')}
                 </button>
                 
                 <button
@@ -331,7 +333,7 @@ const MarketPrices = () => {
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-500 text-white rounded-xl font-medium hover:bg-green-600 transition-colors"
                 >
                   <Download size={20} />
-                  Export as CSV
+                  {t('exportCsvButton')}
                 </button>
                 
                 <button
@@ -342,7 +344,7 @@ const MarketPrices = () => {
                   }}
                   className="w-full px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors"
                 >
-                  Clear Filters
+                  {t('clearFiltersButton')}
                 </button>
               </div>
             </div>
@@ -351,7 +353,7 @@ const MarketPrices = () => {
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
               <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                 <BarChart3 size={20} />
-                Market Trends
+                {t('marketTrendsTitle')}
               </h2>
               
               <div className="space-y-4">
@@ -376,8 +378,7 @@ const MarketPrices = () => {
                 <div className="flex items-start gap-2">
                   <AlertCircle className="text-amber-600 mt-0.5" size={18} />
                   <div className="text-sm text-amber-700">
-                    <strong>Market Insight:</strong> Prices update daily from government APMC markets. 
-                    Check regularly for best selling times.
+                    <strong>{t('marketInsightTitle')}</strong> {t('marketInsightText')}
                   </div>
                 </div>
               </div>
@@ -385,13 +386,13 @@ const MarketPrices = () => {
 
             {/* Quick Tips */}
             <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl shadow-lg p-6 border border-blue-200">
-              <h3 className="font-bold text-blue-800 mb-3">💡 Selling Tips</h3>
+              <h3 className="font-bold text-blue-800 mb-3">💡 {t('sellingTipsTitle')}</h3>
               <ul className="space-y-2 text-sm text-blue-700">
-                <li>• Sell in morning hours for better prices</li>
-                <li>• Check multiple market rates</li>
-                <li>• Grade your produce for premium pricing</li>
-                <li>• Monitor weekly price trends</li>
-                <li>• Consider government procurement schemes</li>
+                <li>• {t('sellingTips1')}</li>
+                <li>• {t('sellingTips2')}</li>
+                <li>• {t('sellingTips3')}</li>
+                <li>• {t('sellingTips4')}</li>
+                <li>• {t('sellingTips5')}</li>
               </ul>
             </div>
           </div>
@@ -403,15 +404,15 @@ const MarketPrices = () => {
               <div className="p-6 border-b border-gray-200">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-800">Market Price List</h2>
+                    <h2 className="text-2xl font-bold text-gray-800">{t('marketPriceListTitle')}</h2>
                     <p className="text-gray-600">
-                      Showing {filteredData.length} commodities
-                      {selectedDistrict !== 'All Kerala' && ` in ${selectedDistrict}`}
+                      {t('showingCommoditiesText')} {filteredData.length} {t('commoditiesLabel')}
+                      {selectedDistrict !== 'All Kerala' && ` ${t('inText')} ${selectedDistrict}`}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-500">
                     <Calendar size={16} />
-                    <span>Date: {new Date().toLocaleDateString('en-IN', { 
+                    <span>{t('dateLabel')}: {new Date().toLocaleDateString('en-IN', { 
                       weekday: 'long', 
                       year: 'numeric', 
                       month: 'long', 
@@ -427,8 +428,8 @@ const MarketPrices = () => {
                   <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 rounded-full mb-4">
                     <RefreshCw className="text-amber-600 animate-spin" size={32} />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-700 mb-2">Loading Market Prices</h3>
-                  <p className="text-gray-600">Fetching latest prices from Kerala markets...</p>
+                  <h3 className="text-xl font-semibold text-gray-700 mb-2">{t('loadingMarketTitle')}</h3>
+                  <p className="text-gray-600">{t('loadingMarketText')}</p>
                 </div>
               ) : (
                 /* Price Table */
@@ -436,12 +437,12 @@ const MarketPrices = () => {
                   <table className="w-full">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="p-4 text-left text-sm font-semibold text-gray-700">Commodity</th>
-                        <th className="p-4 text-left text-sm font-semibold text-gray-700">Market</th>
-                        <th className="p-4 text-left text-sm font-semibold text-gray-700">District</th>
-                        <th className="p-4 text-left text-sm font-semibold text-gray-700">Price Range</th>
-                        <th className="p-4 text-left text-sm font-semibold text-gray-700">Trend</th>
-                        <th className="p-4 text-left text-sm font-semibold text-gray-700">Updated</th>
+                        <th className="p-4 text-left text-sm font-semibold text-gray-700">{t('commodityColumn')}</th>
+                        <th className="p-4 text-left text-sm font-semibold text-gray-700">{t('marketColumn')}</th>
+                        <th className="p-4 text-left text-sm font-semibold text-gray-700">{t('districtColumn')}</th>
+                        <th className="p-4 text-left text-sm font-semibold text-gray-700">{t('priceRangeColumn')}</th>
+                        <th className="p-4 text-left text-sm font-semibold text-gray-700">{t('trendColumn')}</th>
+                        <th className="p-4 text-left text-sm font-semibold text-gray-700">{t('updatedColumn')}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -466,7 +467,7 @@ const MarketPrices = () => {
                               <div className="font-bold text-gray-800">
                                 ₹{item.minPrice} - ₹{item.maxPrice}
                               </div>
-                              <div className="text-sm text-gray-500">per {item.unit}</div>
+                              <div className="text-sm text-gray-500">{t('perUnitText')} {item.unit}</div>
                             </td>
                             <td className="p-4">
                               <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${
@@ -494,7 +495,7 @@ const MarketPrices = () => {
                         <tr>
                           <td colSpan="6" className="p-8 text-center">
                             <div className="text-gray-500">
-                              No market data found for your filters. Try different selection.
+                              {t('noMarketDataText')}
                             </div>
                           </td>
                         </tr>
@@ -508,18 +509,18 @@ const MarketPrices = () => {
               <div className="p-6 border-t border-gray-200 bg-gray-50">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                   <div className="text-sm text-gray-600">
-                    Data sourced from Agmarknet & Kerala Agricultural Department
+                    {t('tableFooterSource')}
                   </div>
                   <div className="flex items-center gap-4">
                     <span className="text-sm text-gray-600">
-                      Showing {filteredData.length} of {marketData.length} entries
+                      {t('tableFooterShowing')} {filteredData.length} {t('tableFooterOf')} {marketData.length} {t('tableFooterEntries')}
                     </span>
                     <button
                       onClick={fetchMarketData}
                       className="flex items-center gap-2 px-4 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       <RefreshCw size={16} />
-                      Refresh
+                      {t('refreshButton')}
                     </button>
                   </div>
                 </div>
@@ -533,26 +534,26 @@ const MarketPrices = () => {
                   <div className="p-2 bg-green-100 rounded-lg">
                     <Bell className="text-green-600" size={24} />
                   </div>
-                  <h3 className="font-bold text-green-800">Price Alerts</h3>
+                  <h3 className="font-bold text-green-800">{t('priceAlertsTitle')}</h3>
                 </div>
                 <p className="text-green-700 text-sm mb-4">
-                  Get notified when your crop prices reach target levels
+                  {t('priceAlertsText')}
                 </p>
                 <button 
                   onClick={() => {
                     const commodity = selectedCommodity || 'Rice';
                     const currentPrice = marketData.find(item => item.commodity === commodity)?.maxPrice || 40;
                     const targetPrice = prompt(
-                      `Set price alert for ${commodity}\nCurrent price: ₹${currentPrice}/kg\n\nEnter target price (₹ per kg):`, 
+                      `${t('priceAlertPrompt')} ${commodity}\n${t('priceAlertCurrent')}: ₹${currentPrice}/kg\n\n${t('priceAlertEnterTarget')}`, 
                       String(currentPrice + 5)
                     );
                     if (targetPrice && !isNaN(targetPrice)) {
-                      alert(`✅ Price alert set!\n\nCommodity: ${commodity}\nTarget Price: ₹${targetPrice}/kg\n\nYou'll be notified when market price reaches ₹${targetPrice}/kg.`);
+                      alert(`✅ ${t('priceAlertSuccess')}\n\nCommodity: ${commodity}\nTarget Price: ₹${targetPrice}/kg\n\nYou'll be notified when market price reaches ₹${targetPrice}/kg.`);
                     }
                   }}
                   className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
                 >
-                  Set Price Alert
+                  {t('setPriceAlertButton')}
                 </button>
               </div>
               
@@ -561,10 +562,10 @@ const MarketPrices = () => {
                   <div className="p-2 bg-purple-100 rounded-lg">
                     <Navigation className="text-purple-600" size={24} />
                   </div>
-                  <h3 className="font-bold text-purple-800">Nearest Markets</h3>
+                  <h3 className="font-bold text-purple-800">{t('nearestMarketsTitle')}</h3>
                 </div>
                 <p className="text-purple-700 text-sm mb-4">
-                  Find Agricultural Produce Market Committees near you
+                  {t('nearestMarketsText')}
                 </p>
                 <button 
                   onClick={() => {
@@ -588,7 +589,7 @@ const MarketPrices = () => {
                   className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm flex items-center gap-2 justify-center"
                 >
                   <Navigation size={16} />
-                  View Map
+                  {t('viewMapButton')}
                 </button>
               </div>
             </div>
@@ -599,26 +600,26 @@ const MarketPrices = () => {
         <div className="mt-12 p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl border border-gray-300">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-              <h4 className="font-bold text-gray-800 mb-2">Data Sources & Updates</h4>
+              <h4 className="font-bold text-gray-800 mb-2">{t('dataSourcesTitle')}</h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div className="flex items-center gap-2">
                   <div className={`w-2 h-2 rounded-full ${marketData.length > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                  <span>Agmarknet API: {marketData.length > 0 ? 'Connected' : 'Offline'}</span>
+                  <span>{t('agmarknetStatus')} {marketData.length > 0 ? t('agmarknetConnected') : t('agmarknetOffline')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>Updates: Every 5 minutes</span>
+                  <span>{t('updatesEvery')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span>Coverage: {districts.length} districts</span>
+                  <span>{t('coverageLabel')} {districts.length}</span>
                 </div>
               </div>
             </div>
             <div className="text-sm text-gray-600">
               <div className="flex items-center gap-2">
                 <RefreshCw size={14} />
-                <span>Next update in 5 minutes</span>
+                <span>{t('nextUpdateText')}</span>
               </div>
             </div>
           </div>

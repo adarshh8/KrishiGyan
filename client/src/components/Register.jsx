@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { User, Mail, Lock, MapPin, Phone, Eye, EyeOff } from 'lucide-react';
 import image from '../assets/image2.png';
+import { useLanguage } from '../contexts/LanguageContext.jsx';
 const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -21,6 +22,7 @@ const Register = () => {
 
   const { register } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const keralaDistricts = [
     'Thiruvananthapuram', 'Kollam', 'Pathanamthitta', 'Alappuzha', 'Kottayam',
@@ -82,7 +84,7 @@ const Register = () => {
             </div>
             <h1 className="text-3xl font-bold text-primary-green mb-2">KRISHIGNAN</h1>
             <p className="text-natural-brown font-medium">FARMING WISDOM</p>
-            <p className="text-gray-600 mt-4">Create your farmer account</p>
+            <p className="text-gray-600 mt-4">{t('createFarmerAccount')}</p>
           </div>
 
           {error && (
@@ -101,7 +103,7 @@ const Register = () => {
                 <input
                   type="text"
                   name="name"
-                  placeholder="Full Name"
+                  placeholder={t('fullNamePlaceholder')}
                   value={formData.name}
                   onChange={handleChange}
                   required
@@ -117,7 +119,7 @@ const Register = () => {
                 <input
                   type="email"
                   name="email"
-                  placeholder="Email Address"
+                  placeholder={t('emailAddressPlaceholder')}
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -133,7 +135,7 @@ const Register = () => {
                 <input
                   type="tel"
                   name="phone"
-                  placeholder="Phone Number"
+                  placeholder={t('phoneNumberPlaceholder')}
                   value={formData.phone}
                   onChange={handleChange}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-all duration-200 bg-gray-50 focus:bg-white"
@@ -152,7 +154,7 @@ const Register = () => {
                   required
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-all duration-200 bg-gray-50 focus:bg-white appearance-none"
                 >
-                  <option value="">Select District</option>
+                  <option value="">{t('selectDistrictPlaceholder')}</option>
                   {keralaDistricts.map(district => (
                     <option key={district} value={district}>{district}</option>
                   ))}
@@ -167,7 +169,7 @@ const Register = () => {
                 <input
                   type="text"
                   name="village"
-                  placeholder="Village/Town"
+                  placeholder={t('villagePlaceholder')}
                   value={formData.location.village}
                   onChange={handleChange}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-all duration-200 bg-gray-50 focus:bg-white"
@@ -182,7 +184,7 @@ const Register = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  placeholder="Create Password"
+                  placeholder={t('createPasswordPlaceholder')}
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -208,15 +210,15 @@ const Register = () => {
               disabled={loading}
               className="w-full bg-gradient-to-r from-primary-green to-primary-light text-white py-3 px-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:transform-none"
             >
-              {loading ? 'Creating Account...' : 'Create Account'}
+              {loading ? t('creatingAccount') : t('createAccount')}
             </button>
           </form>
 
           <div className="text-center mt-6 pt-6 border-t border-gray-200">
             <p className="text-gray-600">
-              Already have an account?{' '}
+              {t('alreadyHaveAccount')}{' '}
               <Link to="/login" className="text-primary-green font-semibold hover:underline">
-                Sign in here
+                {t('signInHere')}
               </Link>
             </p>
           </div>

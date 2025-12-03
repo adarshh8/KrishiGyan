@@ -12,6 +12,11 @@
   --color-natural-sky: #87ceeb;
 }
 
+/* Font support for Indian languages */
+* {
+  font-family: 'Noto Sans', 'Noto Sans Malayalam', 'Noto Sans Tamil', 'Noto Sans Kannada', 'Noto Sans Devanagari', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
 /* Custom logo styles */
 .logo-image {
   width: 5rem;

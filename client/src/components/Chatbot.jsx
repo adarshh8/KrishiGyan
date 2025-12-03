@@ -1,6 +1,7 @@
 // src/components/Chatbot.jsx
 import React, { useState, useRef, useEffect } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { useLanguage } from "../contexts/LanguageContext.jsx";
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,6 +17,7 @@ const Chatbot = () => {
   const [inputMessage, setInputMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  const { t, language } = useLanguage();
 
   // Initialize Gemini AI
   const genAI = new GoogleGenerativeAI("paste your api key here");
@@ -51,6 +53,7 @@ const Chatbot = () => {
       - Government schemes and subsidies
       - Market prices and marketing strategies
       - Weather-based farming advice
+      - Always answer in the user's selected language: ${language === 'ml' ? 'Malayalam' : 'English'}.
       
       Current question: "${inputMessage}"
       Provide helpful, practical response:`;
@@ -71,7 +74,7 @@ const Chatbot = () => {
       console.error("Error:", error);
       const errorMessage = {
         id: Date.now() + 1,
-        text: "I apologize, but I'm experiencing technical difficulties. Please try again later.",
+        text: t('chatbotError'),
         sender: "ai",
         timestamp: new Date(),
       };
@@ -89,12 +92,12 @@ const Chatbot = () => {
   };
 
   const quickQuestions = [
-    "Best crops for this season?",
-    "Pest control in paddy fields?",
-    "Organic farming schemes",
-    "Coconut farming tips",
-    "Weather advice",
-    "Market prices",
+    t('chatbotQuick1'),
+    t('chatbotQuick2'),
+    t('chatbotQuick3'),
+    t('chatbotQuick4'),
+    t('chatbotQuick5'),
+    t('chatbotQuick6'),
   ];
 
   const handleQuickQuestion = (question) => {
@@ -146,7 +149,7 @@ const Chatbot = () => {
         >
           <span className="text-2xl">🌾</span>
           <div className="absolute -top-10 bg-gray-800 text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-            Farmers Assistant
+            {t('chatbotFloatingTooltip')}
           </div>
         </button>
       </div>
@@ -164,8 +167,8 @@ const Chatbot = () => {
               <span className="text-xl">🌾</span>
             </div>
             <div>
-              <h3 className="font-bold text-lg">Farmers Assistant</h3>
-              <p className="text-green-100 text-sm">Powered by AI</p>
+              <h3 className="font-bold text-lg">{t('chatbotHeaderTitle')}</h3>
+              <p className="text-green-100 text-sm">{t('chatbotHeaderSubtitle')}</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -189,7 +192,7 @@ const Chatbot = () => {
 
       {/* Quick Questions */}
       <div className="p-4 border-b border-green-100 bg-green-50">
-        <h4 className="text-sm font-semibold text-green-900 mb-2">Quick Questions:</h4>
+        <h4 className="text-sm font-semibold text-green-900 mb-2">{t('chatbotQuickQuestionsTitle')}</h4>
         <div className="flex flex-wrap gap-2">
           {quickQuestions.map((question, index) => (
             <button
@@ -237,7 +240,7 @@ const Chatbot = () => {
           <div className="flex justify-start">
             <div className="max-w-[85%] rounded-2xl rounded-bl-none bg-white border border-green-200 p-3">
               <div className="flex space-x-1 items-center">
-                <div className="text-sm text-gray-600">Thinking</div>
+                <div className="text-sm text-gray-600">{t('chatbotThinking')}</div>
                 <div className="flex space-x-1">
                   <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></div>
                   <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
@@ -259,7 +262,7 @@ const Chatbot = () => {
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Ask about farming in Kerala..."
+              placeholder={t('chatbotPlaceholder')}
               className="w-full px-3 py-2 border border-green-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none text-sm"
               rows="2"
               disabled={isLoading}
@@ -282,12 +285,12 @@ const Chatbot = () => {
               className="px-4 py-2 text-xs bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 transition-colors"
               title="Clear chat"
             >
-              Clear
+              {t('chatbotClear')}
             </button>
           </div>
         </div>
         <div className="text-xs text-gray-500 mt-2 text-center">
-          Press Enter to send
+          {t('chatbotPressEnter')}
         </div>
       </div>
     </div>
