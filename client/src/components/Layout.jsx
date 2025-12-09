@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { LogOut, Home, Sprout, CloudRain, Shield, TrendingUp, Award, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext.jsx';
+import ThemeToggle from './ThemeToggle.jsx';
 
 const Layout = ({ children }) => {
   const { user, logout } = useAuth();
@@ -137,8 +138,9 @@ const Layout = ({ children }) => {
 
       {/* Main Content */}
       <div className={`flex-1 ${isSidebarCollapsed ? 'ml-20' : 'ml-64'} min-h-screen bg-gradient-to-br from-gray-50 to-natural-beige relative transition-all duration-300`}>
-        {/* Global Language Dropdown (top-right) */}
-        <div className="fixed top-4 right-6 z-40">
+        {/* Global Controls (top-right) */}
+        <div className="fixed top-4 right-6 z-40 flex items-center gap-3">
+          <ThemeToggle />
           <div className="relative">
             <button
               type="button"

@@ -1,0 +1,237 @@
+STATEMENT OF WORK (SOW)
+
+Project Name: Marketplace Offer Comparison Agent
+
+1. Problem Statement
+
+E-commerce brands sell on multiple marketplaces (Flipkart, Amazon, Meesho, Ajio, etc.).
+But tracking competitors’: prices
+
+discounts
+
+coupon offers
+
+bundles
+
+stock availability
+
+
+…across all platforms is manual, slow, and inaccurate.
+
+This results in:
+
+Late reaction to competitor promotions
+
+Losing Buy Box to lower-priced competitors
+
+Missing opportunities to improve conversions
+
+Poor pricing strategy due to incomplete visibility
+
+
+There is no unified dashboard that compares real-time offers from different marketplaces.
+
+
+---
+
+2. Proposed Solution
+
+Create an AI-powered Marketplace Offer Comparison Agent that:
+
+✔ Crawls multiple marketplaces for a given product
+
+✔ Extracts prices, deals, coupons, stock status
+
+✔ Normalizes data for easy comparison
+
+✔ Highlights which competitor has the best offer
+
+✔ Recommends pricing adjustments (match/beat)
+
+The agent will work 100% automatically and send updates to a Slack/Email channel.
+
+
+---
+
+3. Core Features
+
+A. Multi-Marketplace Data Crawling
+
+Scrape/crawl product pages from Amazon, Flipkart, Meesho, Ajio, etc.
+
+Handle different sellers, variants, and pack sizes.
+
+
+B. Real-Time Offer Comparison
+
+Compare:
+✔ Price
+✔ Discount %
+✔ Buy One Get One
+✔ Bundles
+✔ Coupon codes
+✔ Lightning deals
+
+
+C. Intelligent Pricing Suggestions
+
+“To beat this competitor, reduce by ₹X”
+
+“Your bundle is weaker compared to competitor Y”
+
+“Competitor stock is low, increase price slightly.”
+
+
+D. Alerts & Notifications
+
+When a competitor drops price
+
+When a discount ends
+
+When your product is no longer competitive
+
+Daily marketplace summary
+
+
+E. Dashboard (Optional but strong for hackathon)
+
+Charts
+
+Offer history
+
+Ranking table
+
+Recommendation feed
+
+
+
+---
+
+4. Workflow (Agent Logic)
+
+1. Input: Product ID / URL / SKU
+
+
+2. Agent triggers multi-site crawler
+
+
+3. Crawls each marketplace page
+
+
+4. Extracts:
+
+price
+
+MRP
+
+discount
+
+coupons
+
+bundles
+
+stock availability
+
+
+
+5. Normalizes all data into a unified table
+
+
+6. Computes:
+
+best price
+
+highest discount
+
+strongest offer
+
+
+
+7. Runs AI-based pricing model to suggest improvements
+
+
+8. Sends user:
+
+final comparison table
+
+recommended new price
+
+competitor alerts
+
+
+
+9. Stores history for tracking competitor behavior
+
+
+
+
+---
+
+5. Tech Stack
+
+Agent Platform
+
+BoltIc Agents
+
+Cron triggers / Automated agent flows
+
+
+Sources
+
+Amazon, Flipkart, Meesho, Ajio (HTML crawling or API)
+
+Optional: Data aggregator APIs
+
+
+AI
+
+LLM for insights + suggestion generation
+
+Rule engine for pricing logic
+
+History-based trend analysis
+
+
+Output
+
+Slack notifications
+
+Email summaries
+
+CSV reports / dashboard
+
+
+
+---
+
+6. Deliverables
+
+Fully functional Marketplace Offer Comparison Agent
+
+Scraper module for multiple marketplaces
+
+Automated comparison engine
+
+Pricing suggestion engine
+
+Notification system (Slack / Email)
+
+Optional dashboard with charts & trends
+
+Documentation + demo video
+
+
+
+---
+
+7. Success Criteria
+
+Accurate extraction across 3+ marketplaces
+
+Offer comparison in <5 seconds
+
+Intelligent, actionable pricing suggestions
+
+Easy-to-understand summary output
+
+Fully automated recurring checks
