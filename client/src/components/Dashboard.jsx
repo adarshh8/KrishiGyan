@@ -101,7 +101,7 @@ const Dashboard = () => {
             >
               <div className="flex items-center space-x-4">
                 <div className={`p-3 rounded-lg ${
-                  stat.color === 'green' ? 'bg-primary-green' : 
+                  stat.color === 'green' ? 'bg-primary-blue' : 
                   stat.color === 'blue' ? 'bg-natural-sky' : 'bg-accent-gold'
                 } text-white`}>
                   <Icon size={24} />
