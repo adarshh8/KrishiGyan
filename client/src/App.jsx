@@ -5,9 +5,12 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
+import Home from './components/Home';
 import Farms from './components/Farms';
 import CropRecommendations from './components/CropRecommendations';
 import GovernmentSchemes from './components/GovernmentSchemes'; // ADD THIS IMPORT
+import FarmExpenses from './components/FarmExpenses';
+import FarmCalendar from './components/FarmCalendar';
 import Layout from './components/Layout';
 import PestManagement from './components/PestManagement';
 import MarketPrices from './components/MarketPrices';
@@ -29,6 +32,13 @@ function App() {
             
             {/* Protected routes */}
             <Route path="/" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Home />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Layout>
                   <Dashboard />
@@ -69,6 +79,20 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <GovernmentSchemes />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/expenses" element={
+              <ProtectedRoute>
+                <Layout>
+                  <FarmExpenses />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/calendar" element={
+              <ProtectedRoute>
+                <Layout>
+                  <FarmCalendar />
                 </Layout>
               </ProtectedRoute>
             } />

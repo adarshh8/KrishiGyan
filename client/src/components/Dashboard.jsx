@@ -76,7 +76,7 @@ const Dashboard = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-primary-green mb-4">
+        <h1 className="text-4xl font-bold text-primary-blue mb-4">
           {t('welcomeBack')} {user?.name}!
         </h1>
         <p className="text-xl text-natural-brown">

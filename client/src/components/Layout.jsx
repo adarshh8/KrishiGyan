@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { LogOut, Home, Sprout, CloudRain, Shield, TrendingUp, Award, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LogOut, Home, Sprout, CloudRain, Shield, TrendingUp, Award, Calculator, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
 
@@ -15,12 +15,15 @@ const Layout = ({ children }) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const menuItems = [
-    { path: '/', icon: Home, labelKey: 'dashboard' },
+    { path: '/', icon: Home, labelKey: 'home' },
+    { path: '/dashboard', icon: Sprout, labelKey: 'dashboard' },
     { path: '/farms', icon: Sprout, labelKey: 'myFarms' },
     { path: '/crops', icon: CloudRain, labelKey: 'cropAdvice' },
     { path: '/pest', icon: Shield, labelKey: 'pestControl' },
     { path: '/market', icon: TrendingUp, labelKey: 'marketPrices' },
-    { path: '/schemes', icon: Award, labelKey: 'governmentSchemes' }, // ADD THIS
+    { path: '/schemes', icon: Award, labelKey: 'governmentSchemes' },
+    { path: '/expenses', icon: Calculator, labelKey: 'farmExpenses' },
+    { path: '/calendar', icon: Calendar, labelKey: 'farmCalendar' },
   ];
 
   return (

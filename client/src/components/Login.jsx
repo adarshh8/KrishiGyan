@@ -1,18 +1,18 @@
 // src/components/Login.jsx
-import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
-import { User, Lock, Eye, EyeOff, Fullscreen } from 'lucide-react';
-import backgroundImage from '../assets/image1.png';
-import { useLanguage } from '../contexts/LanguageContext.jsx';
+import React, { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate, Link } from "react-router-dom";
+import { User, Lock, Eye, EyeOff, Fullscreen } from "lucide-react";
+import backgroundImage from "../assets/image1.png";
+import { useLanguage } from "../contexts/LanguageContext.jsx";
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -21,12 +21,12 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     const result = await login(formData.email, formData.password);
-    
+
     if (result.success) {
-      navigate('/');
+      navigate("/");
     } else {
       setError(result.message);
     }
@@ -36,12 +36,12 @@ const Login = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   return (
-<div 
+    <div
       className="min-h-screen flex items-center justify-center 
                  bg-cover bg-center bg-no-repeat 
                  from-natural-beige to-green-50 p-4"
@@ -53,15 +53,17 @@ const Login = () => {
           {/* Logo */}
           <div className="text-center mb-8">
             <div className="auth-logo-image mb-4">
-              <img 
-                src="/src/assets/agri_logo.jpg" 
-                alt="KRISHIGNAN Logo" 
+              <img
+                src="/src/assets/agri_logo.jpg"
+                alt="KRISHIGNAN Logo"
                 className="w-full h-full object-cover"
               />
             </div>
-            <h1 className="text-3xl font-bold text-primary-green mb-2">KRISHIGNAN</h1>
+            <h1 className="text-3xl font-bold text-primary-green mb-2">
+              KRISHIGNAN
+            </h1>
             <p className="text-natural-brown font-medium">FARMING WISDOM</p>
-            <p className="text-gray-600 mt-4">{t('signInToYourAccount')}</p>
+            <p className="text-gray-600 mt-4">{t("signInToYourAccount")}</p>
           </div>
 
           {error && (
@@ -80,7 +82,7 @@ const Login = () => {
                 <input
                   type="email"
                   name="email"
-                  placeholder={t('emailPlaceholder')}
+                  placeholder={t("emailPlaceholder")}
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -96,7 +98,7 @@ const Login = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  placeholder={t('passwordPlaceholder')}
+                  placeholder={t("passwordPlaceholder")}
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -116,20 +118,23 @@ const Login = () => {
               </div>
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={loading}
               className="w-full bg-gradient-to-r from-primary-green to-primary-light text-white py-3 px-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:transform-none"
             >
-              {loading ? t('signingIn') : t('signIn')}
+              {loading ? t("signingIn") : t("signIn")}
             </button>
           </form>
 
           <div className="text-center mt-6 pt-6 border-t border-gray-200">
             <p className="text-gray-600">
-              {t('dontHaveAccount')}{' '}
-              <Link to="/register" className="text-primary-green font-semibold hover:underline">
-                {t('signUpHere')}
+              {t("dontHaveAccount")}{" "}
+              <Link
+                to="/register"
+                className="text-primary-green font-semibold hover:underline"
+              >
+                {t("signUpHere")}
               </Link>
             </p>
           </div>
