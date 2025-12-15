@@ -2,10 +2,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-import { User, Lock, Eye, EyeOff, Fullscreen } from "lucide-react";
-import backgroundImage from "../assets/image1.png";
+import { User, Lock, Eye, EyeOff, Volume2, VolumeX } from "lucide-react"; // ADD Volume icons
 import bgVideo from "../assets/video.mp4";
 import { useLanguage } from "../contexts/LanguageContext.jsx";
+
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -14,6 +14,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isMuted, setIsMuted] = useState(true); // ADD: Audio state
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -22,17 +23,23 @@ const Login = () => {
 
   useEffect(() => {
     if (!videoRef.current) return;
-    // ensure muted for autoplay to work in browsers
+    
+    // Start video muted for autoplay compatibility
     videoRef.current.muted = true;
-    const p = videoRef.current.play();
-    if (p && p.catch)
-      p.catch(() => {
-        // autoplay blocked — keep muted and wait for user interaction
-        videoRef.current.muted = true;
+    
+    const playPromise = videoRef.current.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(error => {
+        console.log("Autoplay prevented:", error);
+        // Fallback: wait for user interaction
+        const enableVideo = () => {
+          videoRef.current.play();
+          document.removeEventListener('click', enableVideo);
+        };
+        document.addEventListener('click', enableVideo);
       });
+    }
   }, []);
-
-  // No side-effects required for this simplified login component
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,6 +63,14 @@ const Login = () => {
     });
   };
 
+  // ADD: Toggle audio function
+  const toggleAudio = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
+
   return (
     <div className="relative min-h-screen flex items-center justify-center p-4">
       <video
@@ -64,13 +79,29 @@ const Login = () => {
         className="absolute inset-0 w-full h-full object-cover z-0"
         autoPlay
         loop
-        muted
+        muted={isMuted}
         playsInline
       />
       <div
         className="absolute inset-0 bg-white/30 backdrop-blur-xl z-10"
         aria-hidden="true"
       />
+
+      {/* ADD: Audio Toggle Button */}
+      <button
+        onClick={toggleAudio}
+        className="fixed top-4 right-4 z-30 p-3 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl hover:bg-white transition-all duration-200 group"
+        title={isMuted ? "Unmute audio" : "Mute audio"}
+      >
+        {isMuted ? (
+          <VolumeX className="h-5 w-5 text-gray-700" />
+        ) : (
+          <Volume2 className="h-5 w-5 text-gray-700" />
+        )}
+        <div className="absolute -top-8 right-0 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+          {isMuted ? "Unmute audio" : "Mute audio"}
+        </div>
+      </button>
 
       <div className="relative z-20 w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-2xl p-8 border border-primary-green/10">
