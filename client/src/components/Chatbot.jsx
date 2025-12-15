@@ -19,20 +19,44 @@ const Chatbot = () => {
   const messagesEndRef = useRef(null);
   const { t, language } = useLanguage();
 
-  // Initialize Gemini AI
-  const genAI = new GoogleGenerativeAI("AIzaSyANlgXmy42ItTu98RdKoH8rre93DR7p6Es");
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  // Get API key from environment
+  const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+
+  // Initialize Gemini AI with API key
+  const genAI = new GoogleGenerativeAI(API_KEY);
+  
+  // Get the model
+  const getModel = () => {
+    try {
+      return genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    } catch (error) {
+      console.error("Error initializing Gemini model:", error);
+      return null;
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+  
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
   const handleSendMessage = async () => {
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim() || !API_KEY) {
+      if (!API_KEY) {
+        const errorMessage = {
+          id: Date.now() + 1,
+          text: "⚠️ Gemini API key is missing. Please check your .env file configuration.",
+          sender: "ai",
+          timestamp: new Date(),
+        };
+        setMessages(prev => [...prev, errorMessage]);
+      }
+      return;
+    }
 
     const userMessage = {
       id: Date.now(),
@@ -46,6 +70,11 @@ const Chatbot = () => {
     setIsLoading(true);
 
     try {
+      const model = getModel();
+      if (!model) {
+        throw new Error("Failed to initialize AI model");
+      }
+
       const prompt = `You are an AI assistant for Kerala farmers. Provide accurate agricultural information including:
       - Crop cultivation techniques for Kerala's climate
       - Organic farming methods
@@ -71,10 +100,22 @@ const Chatbot = () => {
 
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Gemini API Error:", error);
+      
+      let errorText = t('chatbotError');
+      
+      // More specific error messages
+      if (error.message.includes("API key")) {
+        errorText = "Invalid or missing Gemini API key. Please check your .env file.";
+      } else if (error.message.includes("quota")) {
+        errorText = "API quota exceeded. Please try again later.";
+      } else if (error.message.includes("network")) {
+        errorText = "Network error. Please check your internet connection.";
+      }
+      
       const errorMessage = {
         id: Date.now() + 1,
-        text: t('chatbotError'),
+        text: `⚠️ ${errorText}`,
         sender: "ai",
         timestamp: new Date(),
       };

@@ -8,11 +8,8 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import farmRoutes from "./routes/farmRoutes.js";
-import weatherRoutes from "./routes/weatherRoutes.js";
-import cropRoutes from "./routes/cropRoutes.js";
-import pestRoutes from "./routes/pestRoutes.js";
-import marketRoutes from "./routes/marketRoutes.js";
-import schemeRoutes from "./routes/schemeRoutes.js";
+
+
 import expenseRoutes from "./routes/expenseRoutes.js";
 import incomeRoutes from "./routes/incomeRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
@@ -27,11 +24,8 @@ app.use(express.json({ limit: "10mb" }));
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/farm", farmRoutes);
-app.use("/api/weather", weatherRoutes);
-app.use("/api/crops", cropRoutes);
-app.use("/api/pests", pestRoutes);
-app.use("/api/market", marketRoutes);
-app.use("/api/schemes", schemeRoutes);
+
+
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/income", incomeRoutes);
 app.use("/api/tasks", taskRoutes);
