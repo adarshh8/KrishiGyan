@@ -1,0 +1,4 @@
+﻿client/src/App.jsx
+client/src/components/Dashboard.jsx
+client/src/components/Layout.jsx
+server/index.js

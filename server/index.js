@@ -16,7 +16,7 @@ import schemeRoutes from "./routes/schemeRoutes.js";
 import expenseRoutes from "./routes/expenseRoutes.js";
 import incomeRoutes from "./routes/incomeRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
-
+import chatRoutes from "./routes/chatRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -35,7 +35,7 @@ app.use("/api/schemes", schemeRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/income", incomeRoutes);
 app.use("/api/tasks", taskRoutes);
-
+app.use("/api/chat", chatRoutes);
 // Test Route
 app.get("/", (req, res) => {
   res.send("🌾 AI Kerala Farmers Backend Running on LOCAL MongoDB ✅");

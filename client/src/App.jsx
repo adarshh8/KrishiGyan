@@ -14,7 +14,7 @@ import FarmCalendar from './components/FarmCalendar';
 import Layout from './components/Layout';
 import PestManagement from './components/PestManagement';
 import MarketPrices from './components/MarketPrices';
-
+import Chat from './components/temp';
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) return null; // avoid redirect while restoring session
@@ -28,10 +28,10 @@ function App() {
         <div className="App">
           <Routes>
             {/* Public routes */}
-            
+
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            
+
             {/* Protected routes */}
             <Route path="/" element={
               <ProtectedRoute>
@@ -75,7 +75,7 @@ function App() {
                 </Layout>
               </ProtectedRoute>
             } />
-            
+
             {/* ADD THIS NEW ROUTE */}
             <Route path="/schemes" element={
               <ProtectedRoute>
@@ -98,7 +98,14 @@ function App() {
                 </Layout>
               </ProtectedRoute>
             } />
-            
+
+            <Route path="/chat" element={
+              <ProtectedRoute>
+                <Layout>
+                  <Chat />
+                </Layout>
+              </ProtectedRoute>
+            } />
             {/* Catch all route - redirect to home */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

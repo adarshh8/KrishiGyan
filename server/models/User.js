@@ -1,4 +1,4 @@
-// models/User.js - UPDATED
+// models/User.js
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
@@ -26,6 +26,14 @@ const userSchema = new mongoose.Schema({
   location: {
     district: String,
     village: String
+  },
+  isOnline: {
+    type: Boolean,
+    default: false
+  },
+  lastSeen: {
+    type: Date,
+    default: Date.now
   },
   createdAt: {
     type: Date,
