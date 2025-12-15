@@ -818,3 +818,22 @@ body {
   color: #059669;
   transform: translateY(-2px);
 }
+/* Video autoplay fixes */
+video {
+  pointer-events: none;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .bg-mobile-fallback {
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+  }
+  
+  video {
+    display: none !important;
+  }
+}

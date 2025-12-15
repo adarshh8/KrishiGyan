@@ -20,7 +20,7 @@ const Chatbot = () => {
   const { t, language } = useLanguage();
 
   // Initialize Gemini AI
-  const genAI = new GoogleGenerativeAI("paste your api key here");
+  const genAI = new GoogleGenerativeAI("AIzaSyANlgXmy42ItTu98RdKoH8rre93DR7p6Es");
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
   const scrollToBottom = () => {

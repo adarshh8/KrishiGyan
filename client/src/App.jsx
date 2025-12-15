@@ -27,6 +27,7 @@ function App() {
         <div className="App">
           <Routes>
             {/* Public routes */}
+            
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             
