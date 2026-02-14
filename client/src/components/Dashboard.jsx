@@ -26,7 +26,7 @@ const Dashboard = () => {
   const [audioError, setAudioError] = useState('');
   
   const audioRef = useRef(null);
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+  const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
 
   const getAuthConfig = () => {
     const config = { headers: {} };

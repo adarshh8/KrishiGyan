@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import api from '../services/api';
 
 const ForgotPassword = () => {
     const navigate = useNavigate();
@@ -37,15 +38,10 @@ const ForgotPassword = () => {
         setSuccess("");
         
         try {
-            const response = await fetch("http://localhost:8080/api/password-reset/request", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: formData.email })
-            });
-
-            const data = await response.json();
+            const response = await api.post('/password-reset/request', { email: formData.email });
+            const data = response.data;
             
-            if (data.success) {
+            if (data.success || response.status === 200) {
                 setStep(2);
                 setSuccess("OTP sent to your email!");
             } else {
@@ -71,16 +67,11 @@ const ForgotPassword = () => {
         setSuccess("");
         
         try {
-            const response = await fetch("http://localhost:8080/api/password-reset/verify", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    email: formData.email,
-                    otp: formData.otp
-                })
+            const response = await api.post('/password-reset/verify', {
+                email: formData.email,
+                otp: formData.otp
             });
-
-            const data = await response.json();
+            const data = response.data;
             
             if (data.success) {
                 setStep(3);
@@ -116,17 +107,12 @@ const ForgotPassword = () => {
         setSuccess("");
         
         try {
-            const response = await fetch("http://localhost:8080/api/password-reset/reset", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    email: formData.email,
-                    otp: formData.otp,
-                    newPassword: formData.newPassword
-                })
+            const response = await api.post('/password-reset/reset', {
+                email: formData.email,
+                otp: formData.otp,
+                newPassword: formData.newPassword
             });
-
-            const data = await response.json();
+            const data = response.data;
             
             if (data.success) {
                 setSuccess("Password reset successful! Redirecting to login...");
