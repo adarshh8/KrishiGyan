@@ -1,0 +1,9 @@
+{
+  "buildCommand": "cd client && npm install && npm run build",
+  "outputDirectory": "client/dist",
+  "env": {
+    "VITE_API_BASE_URL": "@vite_api_base_url",
+    "VITE_GEMINI_API_KEY": "@vite_gemini_api_key",
+    "VITE_PLANT_ID_API_KEY": "@vite_plant_id_api_key"
+  }
+}
